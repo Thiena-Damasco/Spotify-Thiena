@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Clone</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <h1>Spotify</h1>
+    <button onclick="openInsertModal()">Add Song</button>
+</header>
+
+<div class="container">
+    <div class="song-list">
+        <% songs.forEach(song => { %>
+            <div class="song" id="song-<%= song.id %>">
+                <img src="/<%= song.image_path %>" alt="<%= song.title %>">
+                <h3><%= song.title %></h3>
+                <p>Artist: <%= song.artist %></p>
+                <div class="controls">
+                  <button onclick="likeSong(<%= song.id %>)">
+                      <i class="fas fa-heart"></i>
+                  </button>
+                  <button onclick="openUpdateModal(<%= song.id %>)">
+                      <i class="fas fa-edit"></i> 
+                  </button>
+                  <button onclick="deleteSong(<%= song.id %>)">
+                      <i class="fas fa-trash"></i>
+                  </button>
+                  <button onclick="selectSong('/<%= song.file_path %>')">
+                      <i class="fas fa-play"></i> 
+                  </button>
+              </div>
+              
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<footer>
+  <div id="currentSongInfo">
+    <h3 id="currentSongTitle">Song Title</h3>
+    <p id="currentSongArtist">Artist Name</p>
+  </div>
+  <div class="audio-controls">
+    <button onclick="previousSong()">
+        <i class="fas fa-step-backward"></i> 
+    </button>
+    <button id="playPauseBtn" onclick="playPauseSong()">
+      <i class="fas fa-play" id="playPauseIcon"></i> 
+  </button>
+    <button onclick="nextSong()">
+        <i class="fas fa-step-forward"></i>
+    </button>
+    <button onclick="replaySong()">
+        <i class="fas fa-redo"></i> 
+    </button>
+    <button onclick="shuffleSongs()">
+        <i class="fas fa-random"></i> 
+    </button>
+    <span class="audio-time" id="currentTime">0:00</span> /
+    <span class="audio-time" id="duration">0:00</span>
+    <input type="range" id="audioRange" class="range" value="0" step="1" min="0" onchange="setAudioTime(this.value)">
+</div>
+
+</footer>
+
+<!-- Insert Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeInsertModal()">&times;</span>
+        <h2>Insert New Song</h2>
+        <form action="/save-song" method="POST" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Song Title" required><br>
+            <input type="text" name="artist" placeholder="Artist" required><br>
+            <input type="file" name="image" required><br>
+            <input type="file" name="file" required><br>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
+<!-- Update Modal -->
+<div id="updateModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeUpdateModal()">&times;</span>
+        <h2>Edit Song</h2>
+        <form id="updateForm" method="POST" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Song Title" required><br>
+            <input type="text" name="artist" placeholder="Artist" required><br>
+            <input type="file" name="image"><br>
+            <input type="file" name="file"><br>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+</div>
+
+<script src="/script.js"></script>
+
+</body>
+</html>
